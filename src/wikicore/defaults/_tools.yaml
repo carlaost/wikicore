@@ -1,0 +1,6 @@
+# Per-tool overrides. Keys are tool names. Each may set:
+#   description: replaces the default description
+#   description_append: added after the default description
+#   parameters: {param_name: description}
+#   disabled: true   (hides the tool)
+{}

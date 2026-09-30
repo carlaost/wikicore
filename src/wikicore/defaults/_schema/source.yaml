@@ -1,0 +1,11 @@
+name: source
+folder: sources
+description: A verbatim input (pasted notes, transcript, paper text, memory file). Created by save_source, never edited.
+fields:
+  kind: granola, note, paper, chat-export, memory, upload, other
+  url: where it came from
+  file: path under _files/ if an upload
+  filed: whether its content has been filed into pages
+  filed_into: list of "[[slug]]" pages filed from it
+required: [kind]
+sections: []

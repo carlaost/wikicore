@@ -1,0 +1,8 @@
+name: meeting
+folder: meetings
+description: One conversation or call. Title like "2026-01-31 Ada Lovelace". Link the verbatim notes in `sources`.
+fields:
+  date: YYYY-MM-DD
+  with: list of "[[person-or-org-slug]]"
+required: [date]
+sections: [Summary, Decisions, Follow-ups, Notes]

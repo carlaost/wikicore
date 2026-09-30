@@ -1,0 +1,8 @@
+name: decision
+folder: decisions
+description: A standing decision and the reason for it.
+fields:
+  date: YYYY-MM-DD
+  status: standing or superseded
+required: [date]
+sections: [Decision, Why, Consequences]

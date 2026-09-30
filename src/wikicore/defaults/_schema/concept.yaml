@@ -1,0 +1,6 @@
+name: concept
+folder: concepts
+description: An idea or a term of art and how the owner uses it.
+fields: {}
+required: []
+sections: [Definition, How we use it, Don't confuse with]

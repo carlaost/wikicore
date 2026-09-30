@@ -1,0 +1,8 @@
+name: project
+folder: projects
+description: A piece of ongoing work. Projects are also the scopes other pages link to via `projects`. Put old and new names in `aliases`.
+fields:
+  status: active, paused, done
+  repos: list of registered repo names
+required: []
+sections: [Goal, Status, Open, Decisions, Log]

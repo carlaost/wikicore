@@ -1,0 +1,12 @@
+name: paper
+folder: papers
+description: A paper or article the owner read or uploaded.
+fields:
+  authors: list of names
+  year: publication year
+  venue: journal, conference, preprint server
+  url: link
+  doi: DOI
+  file: path under _files/ if uploaded
+required: []
+sections: [Gist, Why it matters to me, Key claims, Links]

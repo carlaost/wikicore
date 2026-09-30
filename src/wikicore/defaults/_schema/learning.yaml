@@ -1,0 +1,7 @@
+name: learning
+folder: learnings
+description: Something learned that is not (yet) a paper or a concept.
+fields:
+  from: where it came from (a person, a talk, a link)
+required: []
+sections: [What, Where from]

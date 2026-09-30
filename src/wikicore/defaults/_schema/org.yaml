@@ -1,0 +1,8 @@
+name: org
+folder: orgs
+description: An organisation (lab, company, funder, institution, programme).
+fields:
+  kind: lab, company, funder, institution, programme, ...
+  url: website
+required: []
+sections: [Who, How I know them, What I want from them, What they want from me, Open threads, Timeline]

@@ -1,0 +1,9 @@
+name: person
+folder: people
+description: Someone the owner deals with. One page per person; put other spellings and nicknames in `aliases`.
+fields:
+  org: "[[org-slug]] they belong to"
+  role: their role or title
+  contact: email, handle, or how to reach them
+required: []
+sections: [Who, How I know them, What I want from them, What they want from me, Open threads, Timeline]

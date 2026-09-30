@@ -1,0 +1,32 @@
+[project]
+name = "wikicore"
+version = "0.1.0"
+description = "An MCP server for an LLM-maintained Markdown wiki"
+license = "MIT"
+readme = "README.md"
+authors = [
+    { name = "Carla Ostmann" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "mcp[cli]>=2.2.0,<2.3",
+    "pypdf>=6.19.0",
+    "python-frontmatter>=1.3.0",
+    "python-multipart>=0.0.32",
+    "pyyaml>=6.0.3",
+    "starlette>=1.7.0",
+    "uvicorn>=0.54.0",
+]
+
+[project.scripts]
+wikicore = "wikicore.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.8.9,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]
