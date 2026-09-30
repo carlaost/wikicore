@@ -239,4 +239,27 @@ def build_asgi(wiki: Wiki) -> Starlette:
         allowed_hosts=hosts + [f"{h}:*" for h in hosts],
         allowed_origins=[f"https://{h}" for h in hosts] + [f"http://{h}" for h in hosts] + [f"http://{h}:*" for h in hosts],
     )
-    return server.streamable_http_app(streamable_http_path="/mcp", transport_security=security, host=wiki.cfg.host)
+    app = server.streamable_http_app(streamable_http_path="/mcp", transport_security=security, host=wiki.cfg.host)
+    app.add_middleware(RootAlias)
+    return app
+
+
+class RootAlias:
+    """Serve MCP at the bare origin too: some clients are configured with the server URL without `/mcp`.
+
+    MCP requests to `/` (POST, DELETE, or an event-stream GET) and the root protected-resource
+    metadata are rewritten to their `/mcp` paths. A browser GET of `/` still gets the connect page.
+    """
+
+    def __init__(self, app: Any) -> None:
+        self.app = app
+
+    async def __call__(self, scope: dict, receive: Any, send: Any) -> None:
+        if scope["type"] == "http":
+            path, method = scope["path"], scope["method"]
+            accept = dict(scope.get("headers") or []).get(b"accept", b"")
+            if path == "/" and (method in ("POST", "DELETE") or (method == "GET" and b"text/event-stream" in accept)):
+                scope = {**scope, "path": "/mcp", "raw_path": b"/mcp"}
+            elif path == "/.well-known/oauth-protected-resource":
+                scope = {**scope, "path": path + "/mcp", "raw_path": (path + "/mcp").encode()}
+        await self.app(scope, receive, send)

@@ -107,3 +107,24 @@ def test_oauth_to_mcp_filing_flow(vault_dir, tmp_path):
     assert stored.meta["filed"] is True and "[[2026-01-31-ada-lovelace]]" in stored.meta["filed_into"]
     assert "Ada owes notes" in Vault(vault_dir).get("ada-lovelace").body
     assert git(vault_dir, "rev-parse", "HEAD") == git(bare, "rev-parse", "HEAD")   # pushed to the remote
+
+
+def test_mcp_is_also_served_at_the_bare_origin(vault_dir, tmp_path):
+    cfg = Config(vault=vault_dir, state_dir=tmp_path / "state", git_push=False, public_url="https://testserver",
+                 allowed_hosts=["testserver"])
+    key = TokenStore(tmp_path / "state" / "tokens.json").add("owner")
+    h = {"Authorization": f"Bearer {key}", "Accept": "application/json, text/event-stream",
+         "Content-Type": "application/json"}
+    init = {"jsonrpc": "2.0", "id": 1, "method": "initialize",
+            "params": {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "t", "version": "1"}}}
+    with TestClient(build_asgi(Wiki(cfg))) as http:
+        r = http.post("/", headers=h, content=json.dumps(init))
+        assert r.status_code == 200 and "mcp-session-id" in r.headers
+        sid = r.headers["mcp-session-id"]
+        http.post("/", headers={**h, "mcp-session-id": sid},
+                  content=json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}))
+        r = http.post("/", headers={**h, "mcp-session-id": sid},
+                      content=json.dumps({"jsonrpc": "2.0", "id": 2, "method": "tools/list"}))
+        assert '"search"' in r.text
+        assert http.get("/.well-known/oauth-protected-resource").status_code == 200
+        assert "Connect" in http.get("/").text or http.get("/").status_code == 200
