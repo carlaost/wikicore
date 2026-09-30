@@ -14,7 +14,7 @@ runuser -u "$APP" -- bash -euo pipefail -c "
   (cd code && /usr/local/bin/uv sync -q --no-dev)
   mkdir -p .ssh state && chmod 700 .ssh state
   [ -f .ssh/id_ed25519 ] || ssh-keygen -q -t ed25519 -N '' -f .ssh/id_ed25519 -C '$APP'
-  ssh-keyscan -q github.com >> .ssh/known_hosts 2>/dev/null; sort -u -o .ssh/known_hosts .ssh/known_hosts
+  ssh-keyscan -T 15 github.com >> .ssh/known_hosts 2>/dev/null; sort -u -o .ssh/known_hosts .ssh/known_hosts
   if [ ! -d vault/.git ]; then
     if ! git clone -q '$VAULT_REPO' vault; then
       echo '== VAULT CLONE FAILED. Add this key as a deploy key WITH WRITE ACCESS on the vault repo, then re-run:'
