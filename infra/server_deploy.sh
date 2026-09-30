@@ -77,8 +77,10 @@ else
   echo "   systemctl start $APP"
 fi
 
-if [ -n "${CERTBOT_EMAIL:-}" ] && ! [ -d "/etc/letsencrypt/live/$DOMAIN" ]; then
-  certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m "$CERTBOT_EMAIL" --redirect \
+# The vhost above is rewritten on every deploy, which drops the TLS lines certbot added, so always
+# (re)install: with an existing certificate this only re-applies it (no new issuance).
+if [ -n "${CERTBOT_EMAIL:-}" ]; then
+  certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m "$CERTBOT_EMAIL" --redirect --keep-until-expiring \
     || echo "== certbot failed (DNS not pointing here yet?). Re-run deploy once it does."
 fi
 echo "== $APP deployed: https://$DOMAIN"
